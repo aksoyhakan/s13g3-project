@@ -67,16 +67,20 @@ server.get("/", (req, res) => {
 */
 
 let authenticatedUser = [];
-server.get("/auth", (req, res) => {
+server.get("/auth", (req, res, next) => {
   const parola = req.query.parola;
   console.log("Parola: " + parola);
   if (parola === "fsweb1122") {
-    authenticatedUser.push(req.ip);
-    setTimeout(() => {
-      authenticatedUser.filter((item) => item != req.ip);
-    }, 1000);
-    console.log("Hoş geldin!..");
-    res.status(200).send("<h1>Hoş geldiniz</h1>");
+    if (!authenticatedUser.includes(req.ip)) {
+      authenticatedUser.push(req.ip);
+      setTimeout(() => {
+        authenticatedUser = authenticatedUser.filter((item) => item != "::1");
+      }, 60000);
+      console.log("Hoş geldin!..");
+      res.status(200).send("<h1>Hoş geldiniz</h1>");
+    } else {
+      next();
+    }
   } else {
     console.log("Yanlış parola. Giremezsin...");
     res.status(403).send("<h1>Giremezsin!!! Yanlış bilgileri kullandın.</h1>");
