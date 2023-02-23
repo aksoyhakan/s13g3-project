@@ -73,8 +73,8 @@ server.get("/auth", (req, res) => {
   if (parola === "fsweb1122") {
     authenticatedUser.push(req.ip);
     setTimeout(() => {
-      authenticatedUser.filter((item) => item !== req.ip);
-    }, 10000);
+      authenticatedUser.filter((item) => item != req.ip);
+    }, 1000);
     console.log("Hoş geldin!..");
     res.status(200).send("<h1>Hoş geldiniz</h1>");
   } else {
